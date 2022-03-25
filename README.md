@@ -1,2 +1,2 @@
 # FrogakNode
-Node ta mongorekin egiteko frogak
+Node ta mongorekin egiteko frogak.
