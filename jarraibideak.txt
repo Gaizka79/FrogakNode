@@ -1,0 +1,11 @@
+npm init    //Crea el package.json
+npm i express -s    //Instala todas las librerias (package-lock.json) y node_modules
+    $ npm install express --save
+Creamos index.js
+    vinculamos express
+    crear app
+npm i -s body-parser
+Añadir "start":....
+    "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
