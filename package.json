@@ -1,0 +1,24 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "Node egiteko ariketak",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gaizka79/FrogakNode.git"
+  },
+  "author": "Gaizka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gaizka79/FrogakNode/issues"
+  },
+  "homepage": "https://github.com/Gaizka79/FrogakNode#readme",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3"
+  }
+}
