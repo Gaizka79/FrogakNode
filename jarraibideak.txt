@@ -13,3 +13,5 @@ instalar mongoose
     npm i -S mongoose
     --> lo añadimos al index.js
 mongoose.connect('mongodb://0.0.0.0:27017/shop', (err, res) => {....}
+
+hurrengoa: Cómo devolver datos con GET desde un API REST
