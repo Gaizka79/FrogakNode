@@ -30,6 +30,9 @@ app.post('/api/product', (req, res) => { //Enviar datos
     //res.status(200).send({message: 'El producto se ha recibido'})
     //res.status(404).send({message: 'El producto NO se ha recibido'})
 
+    console.log('POST /api/product')
+    console.log(req.body)
+
     let product = new Product();
     product.name = req.body.name;
     product.picture = req.body.picture;
