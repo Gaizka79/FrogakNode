@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
 const Product = require('./models/product')
+const product = require('./models/product')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -37,7 +38,6 @@ app.get('/api/product/:productID', (req, res) => {  //Obtener datos de un produc
         if (!product) return res.status(404).send({message: `El producto no existe`});
 
         res.status(200).send({ product: product });
-
     })
 })
 
@@ -67,7 +67,18 @@ app.put('/api/product/:productID', (req, res) => {  //Actualizar datos
     
 })
 
-app.delete('/api/product/:productID,', (req, res) => {
+app.delete('/api/product/:productID', (req, res) => {
+    let productId = req.params.productID;
+
+    Product.findById(productId, (err => {
+        if (err) res.status(500).send({message: `Error al borrar el producto: ${err}`})
+
+        product.remove(err => {
+            if (err) res.status(500).send({message: `Error al borrar el producto: ${err}`})
+            res.status(200).send({message: `El producto ${product} ha sido eliminado`})
+
+        })
+    }))
 
 })
 
