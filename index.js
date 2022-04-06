@@ -19,23 +19,25 @@ app.use(bodyParser.json())
 })*/ 
 
 app.get('/api/product', (req, res) => { //Obtener datos
-    //res.status(200).send({products: []})
-    Product.find({}, (err, products) => {
-        if (err) return res.status(500).send( {message: `Error al realizar lal petición: ${err}`})
-        if (!product) return res.status(404).send({message: `No existen productos`})
+    Product.find({},(err,products) => {
+        if (err) return res.status(500).send({message: `Error al realizar la petición: ${err}`});
+        if (!products) return res.status(404).send({message: 'No existen productos'});
 
-        res.send(200, { products })
+        res.status(200).send({ products });
     })
+    
+    
+    //res.status(200).send({products: []})
 })
 
 app.get('/api/product/:productID', (req, res) => {  //Obtener datos de un producto concreto
-    let productId = req.params.productID;
+    let producId = req.params.productId;
 
     Product.findById(productId, (err, product) => {
-        if (err) return res.status(500).send( {message: `Error al realizar lal petición: ${err}`})
-        if (!product) return res.status(404).send({message: `El producto no existe ${productId}`})
+        if (err) return res.status(500).send({message: `Error al realizar la petición: ${err}`});
+        if (!product) return res.status(404).send({message: `El producto no existe`});
 
-        res.status(200).send({ product /*: product*/})
+        res.status(200).send({ product: product });
     })
 })
 
@@ -62,7 +64,7 @@ app.post('/api/product', (req, res) => { //Enviar datos
 })
 
 app.put('/api/product/:productID', (req, res) => {  //Actualizar datos
-
+    
 })
 
 app.delete('/api/product/:productID', (req, res) => {
