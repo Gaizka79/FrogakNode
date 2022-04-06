@@ -64,14 +64,22 @@ app.post('/api/product', (req, res) => { //Enviar datos
 })
 
 app.put('/api/product/:productID', (req, res) => {  //Actualizar datos
-    
+    let producId = req.params.productID
+    let update = req.body
+
+    Product.findByIdAndUpdate(producId, update, (err, productUpdated) => {
+        if (err) res.status(500).send({message: `Error al actualizar el producto: ${err}`})
+
+        res.status(200).send({ product: productUpdated })
+
+    })
 })
 
 
 app.delete('/api/product/:productID', (req, res) => {
     let productId = req.params.productID;
 
-    Product.findById(productId, (err => {
+    Product.findById(productId, (err, product) => {
         if (err) res.status(500).send({message: `Error al borrar el producto: ${err}`})
 
         product.remove(err => {
@@ -79,7 +87,7 @@ app.delete('/api/product/:productID', (req, res) => {
             res.status(200).send({message: `El producto ${product} ha sido eliminado`})
 
         })
-    }))
+    })
 })
 
 mongoose.connect('mongodb://0.0.0.0:27017/shop', (err, res) => {
