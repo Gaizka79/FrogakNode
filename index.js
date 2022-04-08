@@ -1,22 +1,56 @@
 //'use strict'
-
-const express = require('express')  //importamos librerias
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-
+require('dotenv').config();
+const express = require('express');  //importamos librerias
+//const bodyParser = require('body-parser')
 const Product = require('./models/product')
-const product = require('./models/product')
+//const product = require('./models/product');//sobra????
+//const { default: mongoose } = require('mongoose');
+const dbMongo = require('./utils/mongoConfig');
+const router = require('./routes/routes.js');
+const morgan = require('morgan');
 
-const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT //|| 3000
+const app = express();
+//Middleware akatzak zuzentzeko
+//app.use(app.router); --> Deprecated
+//manejo de errores
+const server = http.createServer(app);
+app.use((err, req, res, next) => {
+    if(!err) return next();
+    console.log("Akatza: " + err);
+    res.send("Bidaliko dizut akatsa: " + err);
+    server.close();
+    setTimeout(() => {
+        process.exit(1);
+    },3000)
+})
+//app.use(bodyParser.urlencoded({ extended: false}))
+//app.use(bodyParser.json())
 
-app.use(bodyParser.urlencoded({ extended: false}))
-app.use(bodyParser.json())
+morgan.token('host', function (req, res) {
+    return req.hostname;
+  });
+morgan.token('body', function (req, res) {
+    return [
+        JSON.stringify(req.body)
+    ]
+});
+app.use(express.json())
+app.use(express.urlencoded({ extended: true}));
+//app.use(express.static('public')); //public karpetan dagoena kargatzeko
+app.use(morgan(':date[iso] :method :host :status :param[id] - :response-time ms :body'));
 
-/*app.get('/hola/:name', (req,res) => {
-    //res.send({ message: 'Hola Mundo!'})
-    res.send({ message: `Hola ${req.params.name}!`})
-})*/ 
+morgan.token('param', function (req, res, param) {
+/*  return req.params[param];  */
+});
+app.get('/', (req, res) => {
+    res.send('kaixo world!');
+});
+
+
+
+
+
 
 app.get('/api/product', (req, res) => { //Obtener datos
     Product.find({},(err,products) => {
@@ -49,14 +83,16 @@ app.post('/api/product', (req, res) => { //Enviar datos
     console.log('POST /api/product')
     console.log(req.body)
 
-    let product = new Product();
-    product.name = req.body.name;
-    product.picture = req.body.picture;
-    product.price = req.body.price;
-    product.category = req.body.category;
-    product.description = req.body.description;
+    let Product = new Product();
+    Product.nombre = req.body.nombre;
+    Product.foto = req.body.foto;
+    Product.precio = req.body.precio;
+    Product.categoria = req.body.categoria;
+    Product.descripcion = req.body.descripcion;
+    Product.disponible = req.body.disponible;
+    Product.fecha = req.body.fecha;
 
-    product.save((err, productStored) => {
+    Product.save((err, productStored) => {
         if (err) res.status(500).send({message: `Error al salvar la BBDD: ${err}`})
 
         res.status(200).send({product: productStored})
@@ -88,10 +124,18 @@ app.delete('/api/product/:productID', (req, res) => {
 
         })
     })
+});
+app.listen(port, () => {
+    //if (err) return console.log("Se jodió"); 
+    console.log(`API REST corriendo en el puerto ${port} a las ${Date()}`);
 })
 
-mongoose.connect('mongodb://0.0.0.0:27017/shop', (err, res) => {
-    if (err) {
+
+
+
+
+/*mongoose.connect('mongodb://127.0.0.1:27017/shop', (err, res) => {
+    if (err) { 
         console.log(err);
         return console.log("Error al conectar a la BBDD.")
     }
@@ -100,6 +144,11 @@ mongoose.connect('mongodb://0.0.0.0:27017/shop', (err, res) => {
         //console.log('API REST corriendo en http://localhost:3000')
         console.log(`API REST corriendo en http://localhost:${port}`)
     })
-})
+})*/
+
+
+
+
+ 
 
 
