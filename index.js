@@ -1,7 +1,5 @@
-//'use strict'
 require('dotenv').config();
 const express = require('express');  //importamos librerias
-//const bodyParser = require('body-parser')
 const Product = require('./models/product')
 //const product = require('./models/product');//sobra????
 //const { default: mongoose } = require('mongoose');
@@ -9,12 +7,11 @@ const dbMongo = require('./utils/mongoConfig');
 const router = require('./routes/routes.js');
 const morgan = require('morgan');
 
-const port = process.env.PORT //|| 3000
+const port = process.env.PORT || 3000
 const app = express();
+
 //Middleware akatzak zuzentzeko
-//app.use(app.router); --> Deprecated
-//manejo de errores
-const server = http.createServer(app);
+//const server = http.createServer(app);
 app.use((err, req, res, next) => {
     if(!err) return next();
     console.log("Akatza: " + err);
@@ -24,8 +21,6 @@ app.use((err, req, res, next) => {
         process.exit(1);
     },3000)
 })
-//app.use(bodyParser.urlencoded({ extended: false}))
-//app.use(bodyParser.json())
 
 morgan.token('host', function (req, res) {
     return req.hostname;
@@ -35,23 +30,47 @@ morgan.token('body', function (req, res) {
         JSON.stringify(req.body)
     ]
 });
-app.use(express.json())
-app.use(express.urlencoded({ extended: true}));
-//app.use(express.static('public')); //public karpetan dagoena kargatzeko
 app.use(morgan(':date[iso] :method :host :status :param[id] - :response-time ms :body'));
 
 morgan.token('param', function (req, res, param) {
 /*  return req.params[param];  */
 });
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true}));
+//app.use(express.static('public')); //public karpetan dagoena kargatzeko
+
+app.use('/', router);
+app.listen(port, () => {
+    //if (err) return console.log("Se jodió"); 
+    console.log(`API REST corriendo en el puerto ${port} a las ${Date()}`);
+})
+
+
+
+/*
 app.get('/', (req, res) => {
     res.send('kaixo world!');
-});
+});*/
+
+
+/*mongoose.connect('mongodb://127.0.0.1:27017/shop', (err, res) => {
+    if (err) { 
+        console.log(err);
+        return console.log("Error al conectar a la BBDD.")
+    }
+    console.log('Conexión a la BBDD establecida...');
+    app.listen(3000, () => {
+        //console.log('API REST corriendo en http://localhost:3000')
+        console.log(`API REST corriendo en http://localhost:${port}`)
+    })
+})*/
 
 
 
+//***********************************************
 
-
-
+/*
 app.get('/api/product', (req, res) => { //Obtener datos
     Product.find({},(err,products) => {
         if (err) return res.status(500).send({message: `Error al realizar la petición: ${err}`});
@@ -125,30 +144,7 @@ app.delete('/api/product/:productID', (req, res) => {
         })
     })
 });
-app.listen(port, () => {
-    //if (err) return console.log("Se jodió"); 
-    console.log(`API REST corriendo en el puerto ${port} a las ${Date()}`);
-})
-
-
-
-
-
-/*mongoose.connect('mongodb://127.0.0.1:27017/shop', (err, res) => {
-    if (err) { 
-        console.log(err);
-        return console.log("Error al conectar a la BBDD.")
-    }
-    console.log('Conexión a la BBDD establecida...');
-    app.listen(3000, () => {
-        //console.log('API REST corriendo en http://localhost:3000')
-        console.log(`API REST corriendo en http://localhost:${port}`)
-    })
-})*/
-
-
-
-
+*/
  
 
 
